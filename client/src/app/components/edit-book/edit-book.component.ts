@@ -44,15 +44,17 @@ export class EditBookComponent implements OnInit {
   }
 
   onSubmit() {
-    const formData: any = new FormData();
-    formData.append('title', this.form.get('title')?.value);
-    formData.append('author', this.form.get('author')?.value);
-    formData.append('description', this.form.get('description')?.value);
-    formData.append('cover_image', this.form.get('cover_image')?.value);
-    this.bookService.updateBook(this.book, formData).subscribe((book) => {
-      this.onUpdateBook.emit(book)
-      this.success = true
-    })
+    if (this.form.valid) {
+      const formData: any = new FormData();
+      formData.append('title', this.form.get('title')?.value);
+      formData.append('author', this.form.get('author')?.value);
+      formData.append('description', this.form.get('description')?.value);
+      formData.append('cover_image', this.form.get('cover_image')?.value);
+      this.bookService.updateBook(this.book, formData).subscribe((book) => {
+        this.onUpdateBook.emit(book)
+        this.success = true
+      })
+    }
   }
 
   uploadCoverImage(event: any) {

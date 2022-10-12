@@ -29,16 +29,18 @@ export class AddBookComponent implements OnInit {
   }
 
   onSubmit() {
-    const formData: any = new FormData();
-    formData.append('title', this.form.get('title')?.value);
-    formData.append('author', this.form.get('author')?.value);
-    formData.append('description', this.form.get('description')?.value);
-    formData.append('cover_image', this.form.get('cover_image')?.value);
-    this.form.reset()
-    this.bookService.createBook(formData).subscribe((book) => {
-      this.onAddBook.emit(book)
-      this.success = true
-    })
+    if (this.form.valid) {
+      const formData: any = new FormData();
+      formData.append('title', this.form.get('title')?.value);
+      formData.append('author', this.form.get('author')?.value);
+      formData.append('description', this.form.get('description')?.value);
+      formData.append('cover_image', this.form.get('cover_image')?.value);
+      this.form.reset()
+      this.bookService.createBook(formData).subscribe((book) => {
+        this.onAddBook.emit(book)
+        this.success = true
+      })
+    }
   }
 
   uploadCoverImage(event: any) {

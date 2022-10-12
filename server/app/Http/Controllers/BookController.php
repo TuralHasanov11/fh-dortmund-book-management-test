@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
+    
    
     public function index(Request $request)
     {
@@ -26,7 +27,6 @@ class BookController extends Controller
     public function store(BookRequest $request)
     {   
         $validated = $request->validated();
-
         $book = new Book;
         $book->title = $validated['title'];
         $book->author = $validated['author'];
@@ -39,7 +39,7 @@ class BookController extends Controller
 
         $book->save();
 
-        return $book;
+        return response($book);
     }
 
    

@@ -24,7 +24,7 @@ export class BooksComponent implements OnInit {
   constructor(private bookService: BookService) { }
 
   ngOnInit(): void {
-    this.bookService.getBooks().subscribe(books => (this.books = books.map(book => ({ ...book, cover_image: 'http://127.0.0.1:8000/storage/app/public/' + book.cover_image }))))
+    this.bookService.getBooks().subscribe(books => (this.books = books))
   }
 
   onDelete(book: Book) {
@@ -36,8 +36,8 @@ export class BooksComponent implements OnInit {
   }
 
   updateBook(book: Book) {
-    this.books.map(b => {
-      if (b.id === book.id) {
+    this.books = this.books.map(b => {
+      if (b.id == book.id) {
         return book
       }
       return b
@@ -49,7 +49,7 @@ export class BooksComponent implements OnInit {
   }
 
   searchBooks() {
-    this.bookService.getBooks(this.search.value).subscribe(books => (this.books = books.map(book => ({ ...book, cover_image: 'http://127.0.0.1:8000/storage/app/public/' + book.cover_image }))))
+    this.bookService.getBooks(this.search.value).subscribe(books => (this.books = books))
   }
 
 }

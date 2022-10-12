@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $books = App\Models\Book::all();
+    return view('welcome', ['books'=>$books]);
 });
 
