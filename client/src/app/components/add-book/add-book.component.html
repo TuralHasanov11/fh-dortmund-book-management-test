@@ -1,4 +1,5 @@
 <div class="card">
+    <app-global-error></app-global-error>
     <div class="card-header">Add new book</div>
     <div class="card-body">
         <div *ngIf="success" class="alert alert-success mb-3" role="alert">
@@ -7,7 +8,10 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input class="form-control" id="title" formControlName="title">
+                <input class="form-control" id="title" formControlName="title" appFocus>
+                <div *ngIf="title.errors && title.touched">
+                    <p *ngIf="title.errors?.required"></p>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="author" class="form-label">Author</label>
@@ -22,7 +26,7 @@
                 <input class="form-control" (change)="uploadCoverImage($event)" type="file" id="cover_image"
                     accept="image/*">
             </div>
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button [disabled]="!form.valid" type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
 </div>

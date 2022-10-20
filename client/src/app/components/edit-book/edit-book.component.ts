@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Book } from 'src/app/interfaces/Book';
 import { BookService } from 'src/app/services/book.service';
 
@@ -23,11 +23,17 @@ export class EditBookComponent implements OnInit {
   success = false
 
   form = this.formBuilder.group({
-    title: [this.book.title, Validators.required],
-    author: [this.book.author, Validators.required],
-    description: [this.book.description],
-    cover_image: [''],
+    title: [this.book.title, Validators.required, Validators.maxLength(255)],
+    author: [this.book.author, Validators.required, Validators.maxLength(255)],
+    description: new FormControl<string>('', [
+      Validators.required
+    ]),
+    cover_image: new FormControl('', []),
   });
+
+  get title() {
+    return this.form.controls.title as FormControl
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.form.patchValue({

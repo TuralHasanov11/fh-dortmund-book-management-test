@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, delay, Observable, retry, throwError } from 'rxjs';
 import { Book, BookCreate } from '../interfaces/Book';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +11,29 @@ export class BookService {
 
   private apiUrl = "http://127.0.0.1:8000/api"
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private errorService: ErrorService) { }
 
   getBooks(search: string = ''): Observable<Book[]> {
     return this.http.get<Book[]>(this.apiUrl + `/books`, {
-      params: {
-        search
-      }
-    })
+      params: new HttpParams({
+        fromObject: {
+          search
+        }
+      })
+    }).pipe(
+      delay(1500),
+      retry(1),
+      catchError(this.errorHandler.bind(this)),
+    )
   }
 
-  getBook(id: number): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl + `/books/${id}`)
+  private errorHandler(error: HttpErrorResponse) {
+    this.errorService.handle(error.message)
+    return throwError(() => error.message)
+  }
+
+  getBook(id: number): Observable<Book> {
+    return this.http.get<Book>(this.apiUrl + `/books/${id}`)
   }
 
   deleteBook(id: number): Observable<string> {

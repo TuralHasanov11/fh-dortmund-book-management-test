@@ -1,0 +1,4 @@
+<div *ngIf="errorService.error$ | async as error">
+    <p>{{error}}</p>
+    <button (click)="errorService.clear()">Clear</button>
+</div>

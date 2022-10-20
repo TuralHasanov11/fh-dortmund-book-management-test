@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from 'src/app/interfaces/Book';
 import { BookService } from 'src/app/services/book.service';
 import { FormControl } from '@angular/forms';
+import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-books',
@@ -12,7 +13,10 @@ import { FormControl } from '@angular/forms';
 export class BooksComponent implements OnInit {
 
   search = new FormControl();
+  loading = false
   books: Book[] = []
+  searchValue = ''
+
   editedBook: Book = {
     id: 0,
     title: '',
@@ -24,7 +28,11 @@ export class BooksComponent implements OnInit {
   constructor(private bookService: BookService) { }
 
   ngOnInit(): void {
-    this.bookService.getBooks().subscribe(books => (this.books = books))
+    this.loading = true
+    this.bookService.getBooks().subscribe(books => {
+      this.books = books
+      this.loading = false
+    })
   }
 
   onDelete(book: Book) {

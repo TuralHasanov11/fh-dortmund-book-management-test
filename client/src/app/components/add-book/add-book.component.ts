@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Book } from 'src/app/interfaces/Book';
 import { BookService } from 'src/app/services/book.service';
 
@@ -16,11 +16,17 @@ export class AddBookComponent implements OnInit {
   success = false
 
   form = this.formBuilder.group({
-    title: ['Book 2', Validators.required],
-    author: ['Author 2', Validators.required],
-    description: ['Description 2'],
-    cover_image: [''],
+    title: ['', Validators.required, Validators.maxLength(255)],
+    author: ['', Validators.required, Validators.maxLength(255)],
+    description: new FormControl<string>('', [
+      Validators.required
+    ]),
+    cover_image: new FormControl('', []),
   });
+
+  get title() {
+    return this.form.controls.title as FormControl
+  }
 
   constructor(private formBuilder: FormBuilder, private bookService: BookService) {
   }

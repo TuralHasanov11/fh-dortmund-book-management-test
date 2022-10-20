@@ -1,46 +1,51 @@
-<div class="row">
-    <div class="col-12 col-md-8">
-        <table class="table table-striped my-5">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Author</th>
-                    <th scope="col">Cover image</th>
-                    <th scope="col">Operations</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let book of books; let i = index">
-                    <th scope="row">{{i+1}}</th>
-                    <td>{{book.title}}</td>
-                    <td>{{book.author}}</td>
-                    <td><img class="book-cover-image" [src]="book.cover_image" [alt]="book.title"></td>
-                    <td>
-                        <button class="btn btn-warning mx-1" (click)="selectBookToEdit(book)">Edit</button>
-                        <button class="btn btn-danger" (click)="onDelete(book)">Delete</button>
-                    </td>
-                </tr>
-                <tr *ngIf="books.length===0">
-                    <td class="text-center" colspan="5">No records!</td>
-                </tr>
-            </tbody>
-        </table>
-        <app-edit-book *ngIf="editedBook.id" [book]="editedBook" (onUpdateBook)="updateBook($event)"></app-edit-book>
+<div *ngIf="!loading">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <table class="table table-striped my-5">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Cover image</th>
+                        <th scope="col">Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let book of books; let i = index">
+                        <th scope="row">{{i+1}}</th>
+                        <td>{{book.title}}</td>
+                        <td>{{book.author}}</td>
+                        <td><img class="book-cover-image" [src]="book.cover_image" [alt]="book.title"></td>
+                        <td>
+                            <a routerLink="" class="btn btn-info"></a>
+                            <button class="btn btn-warning mx-1" (click)="selectBookToEdit(book)">Edit</button>
+                            <button class="btn btn-danger" (click)="onDelete(book)">Delete</button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="books.length===0">
+                        <td class="text-center" colspan="5">No records!</td>
+                    </tr>
+                </tbody>
+            </table>
+            <app-edit-book *ngIf="editedBook.id" [book]="editedBook" (onUpdateBook)="updateBook($event)">
+            </app-edit-book>
 
-    </div>
-    <div class="col-12 col-md-4">
-        <div class="card card-body my-3">
-            <label for="search" class="form-label">Search: </label>
-            <input id="search" type="text" class="form-control" [formControl]="search">
-            <button type="button" class="btn btn-primary my-2" (click)="searchBooks()">Search</button>
         </div>
-        <app-add-book (onAddBook)="addBook($event)"></app-add-book>
+        <div class="col-12 col-md-4">
+            <div class="card card-body my-3">
+                <label for="search" class="form-label">Search: </label>
+                <input id="search" type="text" class="form-control" [formControl]="search">
+                <input id="searchValue" type="text" class="form-control" [(ngModel)]="searchValue">
+                <button type="button" class="btn btn-primary my-2" (click)="searchBooks()">Search</button>
+            </div>
+            <app-add-book (onAddBook)="addBook($event)"></app-add-book>
+        </div>
     </div>
-</div>
 
-<div class="book-modal">
-    <span class="book-modal-close">&times;</span>
-    <img class="book-modal-content modal-img">
-    <div class="book-caption"></div>
+    <div class="book-modal">
+        <span class="book-modal-close">&times;</span>
+        <img class="book-modal-content modal-img">
+        <div class="book-caption"></div>
+    </div>
 </div>
